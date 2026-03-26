@@ -1,7 +1,11 @@
+export type SyncState = "RUNNING" | "SUCCESS" | "FAILED" | "ABORTED";
+
 export interface CloudSyncJobRaw {
     id: number;
-    progress: unknown;
-    state: string;
+    progress: {
+        percent: number;
+    };
+    state: SyncState;
 }
 
 export interface CloudSyncTaskRaw {
@@ -14,7 +18,8 @@ export interface CloudSyncTaskRaw {
 export interface EnabledSyncTask {
     id: number;
     description: string;
-    job: CloudSyncJobRaw;
+    state: SyncState;
+    progress: number;
 }
 
 type EnabledTaskWithJob = CloudSyncTaskRaw & {
@@ -29,7 +34,8 @@ export function getEnabledSyncTasks(tasks: CloudSyncTaskRaw[]): EnabledSyncTask[
             return {
                 id: task.id,
                 description: task.description,
-                job: task.job
+                state: task.job.state,
+                progress: task.job.progress.percent
             };
         });
 }
@@ -49,4 +55,35 @@ export async function sendDiscordNotification(webhookUrl: string, content: strin
 
     const text = await response.text();
     console.log(response.status, text);
+}
+
+export function buildTaskStatusMessage(task: EnabledSyncTask): string[] {
+    const msg: string[] = [];
+
+    switch (task.state) {
+        case "RUNNING":
+            msg.push(':hourglass: ');
+            break;
+        case "SUCCESS":
+            msg.push(':white_check_mark: ');
+            break;
+        case "FAILED":
+            msg.push(':warning: ');
+            break;
+        case "ABORTED":
+            msg.push(':x: ');
+            break;
+    }
+
+    msg[0] += `**${task.description}**: ${task.state}`;
+
+    if (task.state === "RUNNING") {
+        msg.push(`      ${displayProgressBar(task.progress)} ${Math.round(task.progress * 100)}%`);
+    }
+
+    return msg;
+}
+
+export function displayProgressBar(progress: number): string {
+    return '█'.repeat(Math.round(progress * 100 / 10)) + '░'.repeat(10 - Math.round(progress * 100 / 10));
 }
