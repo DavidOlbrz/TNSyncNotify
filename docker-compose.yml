@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  tnsyncnotify:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tnsyncnotify
+    restart: unless-stopped
+    environment:
+      # Required environment variables
+      TRUENAS_HOST: ${TRUENAS_HOST}
+      TRUENAS_API_KEY: ${TRUENAS_API_KEY}
+      DISCORD_WEBHOOK: ${DISCORD_WEBHOOK}
+      # Optional: Set to 0 if you have a valid SSL certificate, 1 for self-signed
+      NODE_TLS_REJECT_UNAUTHORIZED: ${NODE_TLS_REJECT_UNAUTHORIZED:-0}
