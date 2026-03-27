@@ -1,5 +1,9 @@
 export type SyncState = "RUNNING" | "SUCCESS" | "FAILED" | "ABORTED";
 
+const PROGRESS_BAR_LENGTH: number = 10;
+const PROGRESS_COMPLETE_SYMBOL: string = '\u2588'; // symbol █
+const PROGRESS_INCOMPLETE_SYMBOL: string = '\u2591'; // symbol ░
+
 export interface CloudSyncJobRaw {
     id: number;
     progress: {
@@ -81,12 +85,30 @@ export function buildTaskStatusMessage(task: EnabledSyncTask): string[] {
     msg[0] += `**${task.description}**: ${task.state}`;
 
     if (task.state === "RUNNING") {
-        msg.push(`       ${displayProgressBar(task.progress)} ${Math.round(task.progress * 100)}%`);
+        msg.push(`${displayProgressBar(task.progress)} ${Math.round(task.progress)}%`);
     }
 
     return msg;
 }
 
+/**
+ * converts a progress value (between 1 and 100) into a visual progress bar string using Unicode characters
+ * 
+ * @param progress progress value between 1 and 100
+ * @returns visual progress bar string
+ */
 export function displayProgressBar(progress: number): string {
-    return '█'.repeat(Math.round(progress * 100 / 10)) + '░'.repeat(10 - Math.round(progress * 100 / 10));
+    let bar: string = '\u{0020}\u{0020}\u{0020}\u{0020}\u{0020}\u{0020}\u{0020}';
+
+    const completeLength: number = Math.round(progress / PROGRESS_BAR_LENGTH);
+
+    for (let i = 0; i < completeLength; i++) {
+        bar += PROGRESS_COMPLETE_SYMBOL;
+    }
+
+    for (let i = 0; i < PROGRESS_BAR_LENGTH - completeLength; i++) {
+        bar += PROGRESS_INCOMPLETE_SYMBOL;
+    }
+
+    return bar;
 }
