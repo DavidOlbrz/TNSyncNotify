@@ -1,16 +1,19 @@
 # TNSyncNotify
 
-Benachrichtigt per Discord ueber den Status deiner TrueNAS Cloud Sync Tasks.
+> [!Note]
+> A great portion of this project was created with the help of [GitHub Copilot](https://github.com/features/copilot).
+
+Notifies you via Discord about the status of your TrueNAS Cloud Sync tasks.
 
 ## Setup
 
-1. Abhaengigkeiten installieren:
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Umgebungsvariablen in `.env` setzen (siehe `.env.example`).
+2. Set environment variables in `.env` (see `.env.example`).
 
 ## Development
 
@@ -24,7 +27,7 @@ npm run dev
 npm run build
 ```
 
-Der TypeScript-Build landet in `dist/`.
+The TypeScript build is located in `dist/`.
 
 ## Production Start
 
