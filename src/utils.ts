@@ -73,6 +73,9 @@ export function buildTaskStatusMessage(task: EnabledSyncTask): string[] {
         case "ABORTED":
             msg.push(':x: ');
             break;
+        default:
+            msg.push(':bell: ');
+            break;
     }
 
     msg[0] += `**${task.description}**: ${task.state}`;
