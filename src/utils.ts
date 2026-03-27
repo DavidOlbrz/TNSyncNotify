@@ -78,7 +78,7 @@ export function buildTaskStatusMessage(task: EnabledSyncTask): string[] {
     msg[0] += `**${task.description}**: ${task.state}`;
 
     if (task.state === "RUNNING") {
-        msg.push(`      ${displayProgressBar(task.progress)} ${Math.round(task.progress * 100)}%`);
+        msg.push(`       ${displayProgressBar(task.progress)} ${Math.round(task.progress * 100)}%`);
     }
 
     return msg;
