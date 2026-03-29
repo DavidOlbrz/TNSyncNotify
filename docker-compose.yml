@@ -19,3 +19,5 @@ services:
       RUNNING_UPDATE_INTERVAL_MS: ${RUNNING_UPDATE_INTERVAL_MS:-300000}
       RECONNECT_DELAY_MS: ${RECONNECT_DELAY_MS:-5000}
       KEEPALIVE_INTERVAL_MS: ${KEEPALIVE_INTERVAL_MS:-30000}
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
